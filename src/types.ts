@@ -9,5 +9,5 @@ export interface ActivePlayer extends Player {
 }
 
 export interface ActivePlayerOutcome extends ActivePlayer {
-  recomendedPosition: string;
+  recommendedPosition: string;
 }

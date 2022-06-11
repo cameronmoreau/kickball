@@ -11,6 +11,7 @@ export function generatePositions(
   let pendingPlayers = players.filter((p) => p.available);
   pendingPlayers = shuffleArray(pendingPlayers);
 
+  // Add override positions to result
   const overridedPendingPlayers = pendingPlayers.filter(
     (p) => !!p.overridePosition
   );
@@ -24,29 +25,31 @@ export function generatePositions(
 
     result.push({
       ...player,
-      recomendedPosition: player.overridePosition as string,
+      recommendedPosition: player.overridePosition as string,
     });
   }
 
+  // Add all other players to result
   while (pendingPlayers.length) {
     const player = pendingPlayers.shift() as ActivePlayer;
-    let recomendedPosition: string | null = null;
+    let recommendedPosition: string | null = null;
 
     if (pendingPositions.length > 0) {
-      recomendedPosition = pendingPositions.shift() as string;
+      recommendedPosition = pendingPositions.shift() as string;
     } else {
-      recomendedPosition = "Bench";
+      recommendedPosition = "Bench";
     }
 
     result.push({
       ...player,
-      recomendedPosition,
+      recommendedPosition,
     });
   }
 
+  // Sort by positions with "Bench" last
   return result.sort((a, b) => {
-    const pa = positions.indexOf(a.recomendedPosition);
-    const pb = positions.indexOf(b.recomendedPosition);
+    const pa = positions.indexOf(a.recommendedPosition);
+    const pb = positions.indexOf(b.recommendedPosition);
 
     return pa === -1 ? 0 : pa - pb;
   });

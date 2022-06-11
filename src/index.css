@@ -20,3 +20,7 @@ td {
 tr:nth-child(even) {
   background: #d8d8d8;
 }
+
+.positions-table--override td {
+  font-weight: bold;
+}

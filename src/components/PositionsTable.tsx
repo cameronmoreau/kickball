@@ -4,6 +4,8 @@ import { ActivePlayerOutcome } from "../types";
 
 type Props = {
   positions: ActivePlayerOutcome[];
+  selectedIndexes: Set<number>;
+  onSelectChanged: (idx: number, selected: boolean) => void;
 };
 
 const PositionsTable: React.FC<Props> = (props) => {
@@ -24,6 +26,13 @@ const PositionsTable: React.FC<Props> = (props) => {
               "positions-table--override": !!p.overridePosition,
             })}
           >
+            <td>
+              <input
+                type="checkbox"
+                checked={props.selectedIndexes.has(idx)}
+                onChange={(e) => props.onSelectChanged(idx, e.target.checked)}
+              />
+            </td>
             <td>{idx + 1}</td>
             <td>{p.name}</td>
             <td>{p.recommendedPosition}</td>

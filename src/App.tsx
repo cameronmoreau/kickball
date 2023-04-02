@@ -1,114 +1,30 @@
-import React, { useState, useCallback } from "react";
 import "./index.css";
 
-import { PLAYERS, POSITIONS } from "./data";
-import { generatePositions } from "./generator";
-import { ActivePlayer, ActivePlayerOutcome } from "./types";
+import { useState } from "react";
+import GameSetup from "./scenes/GameSetup";
+import InGame from "./scenes/InGame";
+import { GameState } from "./types";
 
-import PositionsTable from "./components/PositionsTable";
-import PlayersTable from "./components/PlayersTable";
-import AppContainer from "./components/AppContainer";
-import Button from "./ui/Button";
+import StateProvider from "./state";
 
 function App() {
-  const [players, setPlayers] = useState<ActivePlayer[]>(
-    PLAYERS.map((p) => ({ ...p, available: true }))
-  );
+  const [gameState, setGameState] = useState<GameState>("setup");
 
-  const [selected, setSelected] = useState<Set<number>>(new Set());
-  const [positions, setPositions] = useState<ActivePlayerOutcome[]>([]);
+  if (gameState === "setup") {
+    return <GameSetup onReady={() => setGameState("active")} />;
+  }
 
-  const onGeneratePositions = useCallback(() => {
-    const positions = generatePositions(players, POSITIONS);
-    setPositions(positions);
-  }, [players]);
+  if (gameState === "active") {
+    return <InGame />;
+  }
 
-  const onAvailableChanged = useCallback(
-    (player: ActivePlayer, available: boolean) => {
-      const temp = [...players];
-      const tp = temp.find((t) => t.name === player.name);
-      tp!.available = available;
-      tp!.overridePosition = undefined;
-      setPlayers(temp);
-    },
-    [players]
-  );
-
-  const onOverrideChanged = useCallback(
-    (player: ActivePlayer, position: string) => {
-      const temp = [...players];
-      temp.find((t) => t.name === player.name)!.overridePosition =
-        position === "any" ? undefined : position;
-      setPlayers(temp);
-    },
-    [players]
-  );
-
-  const onSelectedChanged = useCallback(
-    (idx: number, s: boolean) => {
-      const temp = new Set([...Array.from(selected)]);
-      if (s) {
-        temp.add(idx);
-      } else {
-        temp.delete(idx);
-      }
-
-      setSelected(temp);
-    },
-    [selected]
-  );
-
-  const onPlayerSwap = useCallback(() => {
-    const [a, b] = Array.from(selected);
-    const temp = [...positions];
-
-    const tp = {
-      name: positions[a].name,
-      gender: positions[a].gender,
-    };
-
-    temp[a].name = positions[b].name;
-    temp[a].gender = positions[b].gender;
-
-    temp[b] = {
-      ...positions[b],
-      ...tp,
-    };
-
-    setPositions(temp);
-    setSelected(new Set());
-  }, [selected, positions]);
-
-  return (
-    <div className="App">
-      <AppContainer
-        Footer={
-          <div className="border-t p-2 border-gray-200 bg-white">
-            <Button onClick={onGeneratePositions}>Assume Positions</Button>
-            <Button onClick={onPlayerSwap} disabled={selected.size !== 2}>
-              Swap
-            </Button>
-          </div>
-        }
-      >
-        <div>
-          <PlayersTable
-            players={players}
-            positions={POSITIONS}
-            onAvailableChanged={onAvailableChanged}
-            onOverrideChanged={onOverrideChanged}
-          />
-          {positions.length > 0 && (
-            <PositionsTable
-              positions={positions}
-              selectedIndexes={selected}
-              onSelectChanged={onSelectedChanged}
-            />
-          )}
-        </div>
-      </AppContainer>
-    </div>
-  );
+  return null;
 }
 
-export default App;
+const AppWithState = () => (
+  <StateProvider>
+    <App />
+  </StateProvider>
+);
+
+export default AppWithState;

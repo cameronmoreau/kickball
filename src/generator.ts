@@ -6,6 +6,7 @@ export function generatePositions(
 ): ActivePlayerOutcome[] {
   const result: ActivePlayerOutcome[] = [];
 
+  let kickingPosition = 1;
   let pendingPositions = [...positions];
 
   let pendingPlayers = players.filter((p) => p.available);
@@ -25,6 +26,7 @@ export function generatePositions(
 
     result.push({
       ...player,
+      kickingPosition: kickingPosition++,
       recommendedPosition: player.overridePosition as string,
     });
   }
@@ -42,6 +44,7 @@ export function generatePositions(
 
     result.push({
       ...player,
+      kickingPosition: kickingPosition++,
       recommendedPosition,
     });
   }

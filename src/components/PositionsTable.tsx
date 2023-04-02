@@ -1,6 +1,8 @@
 import React from "react";
-import classnames from "classnames";
 import { ActivePlayerOutcome } from "../types";
+import Checkbox from "../ui/Checkbox";
+import { Table, TableBody, Td, Th } from "../ui/Table";
+import PlayerCard from "./PlayerCard";
 
 type Props = {
   positions: ActivePlayerOutcome[];
@@ -10,36 +12,32 @@ type Props = {
 
 const PositionsTable: React.FC<Props> = (props) => {
   return (
-    <table className="positions-table">
+    <Table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Player</th>
-          <th>Position</th>
+          <Th />
+          <Th>Player</Th>
+          <Th>Position</Th>
         </tr>
       </thead>
-      <tbody>
+      <TableBody>
         {props.positions.map((p, idx) => (
-          <tr
-            key={`position-${idx}`}
-            className={classnames({
-              "positions-table--override": !!p.overridePosition,
-            })}
-          >
-            <td>
-              <input
-                type="checkbox"
+          <tr key={`position-${idx}`}>
+            <Td>
+              <Checkbox
+                id={`checkbox-${idx}`}
                 checked={props.selectedIndexes.has(idx)}
                 onChange={(e) => props.onSelectChanged(idx, e.target.checked)}
               />
-            </td>
-            <td>{idx + 1}</td>
-            <td>{p.name}</td>
-            <td>{p.recommendedPosition}</td>
+            </Td>
+            <Td>
+              <PlayerCard player={p} />
+            </Td>
+            <Td>{p.recommendedPosition}</Td>
           </tr>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 };
 

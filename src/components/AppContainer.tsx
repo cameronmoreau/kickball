@@ -1,9 +1,9 @@
 import React from "react";
 
 interface AppContainerProps {
-  children?: React.ReactElement;
-  Header?: React.ReactElement;
-  Footer?: React.ReactElement;
+  children?: React.ReactNode;
+  Header?: React.ReactNode;
+  Footer?: React.ReactNode;
 }
 
 const AppContainer: React.FC<AppContainerProps> = ({

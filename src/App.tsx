@@ -8,7 +8,7 @@ import { ActivePlayer, ActivePlayerOutcome } from "./types";
 import PositionsTable from "./components/PositionsTable";
 import PlayersTable from "./components/PlayersTable";
 import AppContainer from "./components/AppContainer";
-import Button from "./components/Button";
+import Button from "./ui/Button";
 
 function App() {
   const [players, setPlayers] = useState<ActivePlayer[]>(

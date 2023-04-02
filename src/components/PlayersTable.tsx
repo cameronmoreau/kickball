@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { ActivePlayer } from "../types";
 
-import Switch from "./Switch";
-import Select from "./Select";
-import Avatar from "./Avatar";
+import Switch from "../ui/Switch";
+import Select from "../ui/Select";
+import PlayerCard from "./PlayerCard";
 
 type Props = {
   players: ActivePlayer[];
@@ -45,12 +45,7 @@ const PlayersTable: React.FC<Props> = (props) => {
               className={idx % 2 === 0 ? undefined : "bg-gray-50"}
             >
               <td className="py-4">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Avatar src={player.imageUrl} name={player.name} />
-                  </div>
-                  <div className="ml-4">{player.name}</div>
-                </div>
+                <PlayerCard player={player} />
               </td>
               <td className="py-4">
                 <Switch

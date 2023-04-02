@@ -12,10 +12,10 @@ const AppContainer: React.FC<AppContainerProps> = ({
   children,
 }) => {
   return (
-    <div className="flex flex-col h-screen justify-between">
-      {Header}
-      <main className="mb-auto overflow-scroll	">{children}</main>
-      {Footer}
+    <div>
+      {Header && <div className="sticky top-0 z-50">{Header}</div>}
+      <main>{children}</main>
+      {Footer && <div className="sticky bottom-0 z-50">{Footer}</div>}
     </div>
   );
 };

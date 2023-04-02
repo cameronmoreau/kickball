@@ -1,6 +1,7 @@
 export interface Player {
   name: string;
   gender: "male" | "female";
+  imageUrl?: string;
 }
 
 export interface ActivePlayer extends Player {

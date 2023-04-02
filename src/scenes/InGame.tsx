@@ -25,27 +25,15 @@ const InGame: React.FC = () => {
     [selected]
   );
 
-  // TODO: better swap
   const onPlayerSwap = useCallback(() => {
     const [a, b] = Array.from(selected);
     const temp = [...positions];
 
-    const tp = {
-      name: positions[a].name,
-      gender: positions[a].gender,
-      imageUrl: positions[a].imageUrl,
-      kickingPosition: positions[a].kickingPosition,
-    };
+    const x = temp[a].recommendedPosition;
+    const y = temp[b].recommendedPosition;
 
-    temp[a].name = positions[b].name;
-    temp[a].gender = positions[b].gender;
-    temp[a].imageUrl = positions[b].imageUrl;
-    temp[a].kickingPosition = positions[b].kickingPosition;
-
-    temp[b] = {
-      ...positions[b],
-      ...tp,
-    };
+    temp[a].recommendedPosition = y;
+    temp[b].recommendedPosition = x;
 
     setPositions(temp);
     setSelected(new Set());

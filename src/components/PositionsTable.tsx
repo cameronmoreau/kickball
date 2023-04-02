@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { POSITIONS } from "../data";
 import { ActivePlayerOutcome } from "../types";
 import Checkbox from "../ui/Checkbox";
 import { Table, TableBody, Td, Th } from "../ui/Table";
@@ -10,7 +11,26 @@ type Props = {
   onSelectChanged: (idx: number, selected: boolean) => void;
 };
 
-const PositionsTable: React.FC<Props> = (props) => {
+const ORDER_MAP = POSITIONS.reduce(
+  (acc, pos, i) => ({
+    ...acc,
+    [pos]: i,
+  }),
+  { Bench: POSITIONS.length }
+) as { [k: string]: number };
+
+const PositionsTable: React.FC<Props> = ({
+  positions: rawPositions,
+  selectedIndexes,
+  onSelectChanged,
+}) => {
+  const positions = useMemo(() => {
+    return rawPositions.sort(
+      (a, b) =>
+        ORDER_MAP[a.recommendedPosition] - ORDER_MAP[b.recommendedPosition]
+    );
+  }, [rawPositions]);
+
   return (
     <Table>
       <thead>
@@ -21,13 +41,13 @@ const PositionsTable: React.FC<Props> = (props) => {
         </tr>
       </thead>
       <TableBody>
-        {props.positions.map((p, idx) => (
+        {positions.map((p, idx) => (
           <tr key={`position-${idx}`}>
             <Td>
               <Checkbox
                 id={`checkbox-${idx}`}
-                checked={props.selectedIndexes.has(idx)}
-                onChange={(e) => props.onSelectChanged(idx, e.target.checked)}
+                checked={selectedIndexes.has(idx)}
+                onChange={(e) => onSelectChanged(idx, e.target.checked)}
               />
             </Td>
             <Td>

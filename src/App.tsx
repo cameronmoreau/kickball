@@ -7,6 +7,8 @@ import { ActivePlayer, ActivePlayerOutcome } from "./types";
 
 import PositionsTable from "./components/PositionsTable";
 import PlayersTable from "./components/PlayersTable";
+import AppContainer from "./components/AppContainer";
+import Button from "./components/Button";
 
 function App() {
   const [players, setPlayers] = useState<ActivePlayer[]>(
@@ -79,24 +81,32 @@ function App() {
 
   return (
     <div className="App">
-      <PlayersTable
-        players={players}
-        positions={POSITIONS}
-        onAvailableChanged={onAvailableChanged}
-        onOverrideChanged={onOverrideChanged}
-      />
-      <hr />
-      <button onClick={onGeneratePositions}>Assume Positions</button>{" "}
-      <button onClick={onPlayerSwap} disabled={selected.size !== 2}>
-        Swap Players
-      </button>
-      {positions.length > 0 && (
-        <PositionsTable
-          positions={positions}
-          selectedIndexes={selected}
-          onSelectChanged={onSelectedChanged}
-        />
-      )}
+      <AppContainer
+        Footer={
+          <div className="border-t p-2 border-gray-200 bg-white">
+            <Button onClick={onGeneratePositions}>Assume Positions</Button>
+            <Button onClick={onPlayerSwap} disabled={selected.size !== 2}>
+              Swap
+            </Button>
+          </div>
+        }
+      >
+        <div>
+          <PlayersTable
+            players={players}
+            positions={POSITIONS}
+            onAvailableChanged={onAvailableChanged}
+            onOverrideChanged={onOverrideChanged}
+          />
+          {positions.length > 0 && (
+            <PositionsTable
+              positions={positions}
+              selectedIndexes={selected}
+              onSelectChanged={onSelectedChanged}
+            />
+          )}
+        </div>
+      </AppContainer>
     </div>
   );
 }

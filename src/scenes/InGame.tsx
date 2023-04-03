@@ -39,6 +39,15 @@ const InGame: React.FC = () => {
     setSelected(new Set());
   }, [selected, positions, setPositions]);
 
+  const onShare = () => {
+    if (window.navigator.share) {
+      window.navigator.share({
+        title: "Share Lineup",
+        text: "test to share\nthe lineup",
+      });
+    }
+  };
+
   return (
     <AppContainer
       Header={
@@ -51,13 +60,20 @@ const InGame: React.FC = () => {
         </div>
       }
       Footer={
-        tab === "Pitching" && (
-          <div className="border-t p-2 border-gray-200 bg-white">
-            <Button onClick={onPlayerSwap} disabled={selected.size !== 2}>
-              Swap
-            </Button>
-          </div>
-        )
+        <div>
+          {tab === "Pitching" && (
+            <div className="border-t p-2 border-gray-200 bg-white">
+              <Button onClick={onPlayerSwap} disabled={selected.size !== 2}>
+                Swap
+              </Button>
+            </div>
+          )}
+          {tab === "Kicking" && (
+            <div className="border-t p-2 border-gray-200 bg-white">
+              <Button onClick={onShare}>Share Lineup</Button>
+            </div>
+          )}
+        </div>
       }
     >
       {tab === "Kicking" && <KickingTable positions={positions} />}

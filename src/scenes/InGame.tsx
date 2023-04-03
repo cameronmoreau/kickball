@@ -5,6 +5,7 @@ import PositionsTable from "../components/PositionsTable";
 import { useKickballState } from "../state";
 import Button from "../ui/Button";
 import Tabs from "../ui/Tabs";
+import { shareLineup } from "../utils";
 
 const InGame: React.FC = () => {
   const { positions, setPositions } = useKickballState();
@@ -39,15 +40,6 @@ const InGame: React.FC = () => {
     setSelected(new Set());
   }, [selected, positions, setPositions]);
 
-  const onShare = () => {
-    if (window.navigator.share) {
-      window.navigator.share({
-        title: "Share Lineup",
-        text: "test to share\nthe lineup",
-      });
-    }
-  };
-
   return (
     <AppContainer
       Header={
@@ -70,7 +62,9 @@ const InGame: React.FC = () => {
           )}
           {tab === "Kicking" && (
             <div className="border-t p-2 border-gray-200 bg-white">
-              <Button onClick={onShare}>Share Lineup</Button>
+              <Button onClick={() => shareLineup(positions)}>
+                Share Lineup
+              </Button>
             </div>
           )}
         </div>

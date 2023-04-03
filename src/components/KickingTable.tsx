@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { ActivePlayerOutcome } from "../types";
 import { Table, TableBody, Td, Th } from "../ui/Table";
+import { orderPositionsForKicking } from "../utils";
 import PlayerCard from "./PlayerCard";
 
 type Props = {
@@ -8,9 +9,10 @@ type Props = {
 };
 
 const KickingTable: React.FC<Props> = ({ positions: rawPositions }) => {
-  const positions = useMemo(() => {
-    return rawPositions.sort((a, b) => a.kickingPosition - b.kickingPosition);
-  }, [rawPositions]);
+  const positions = useMemo(
+    () => orderPositionsForKicking(rawPositions),
+    [rawPositions]
+  );
 
   return (
     <Table>

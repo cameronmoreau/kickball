@@ -1,8 +1,15 @@
+import {
+  ArrowPathRoundedSquareIcon,
+  CheckIcon,
+  PaperAirplaneIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/20/solid";
 import React, { useCallback, useState } from "react";
 import AppContainer from "../components/AppContainer";
 import KickingTable from "../components/KickingTable";
 import PositionsTable from "../components/PositionsTable";
 import { useKickballState } from "../state";
+import { ActivePlayerOutcome } from "../types";
 import Button from "../ui/Button";
 import Tabs from "../ui/Tabs";
 import { shareLineup } from "../utils";
@@ -11,6 +18,7 @@ const InGame: React.FC = () => {
   const { positions, setPositions } = useKickballState();
   const [tab, setTab] = useState<string>("Kicking");
   const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [editLineup, setEditLineup] = useState(false);
 
   const onSelectedChanged = useCallback(
     (idx: number, s: boolean) => {
@@ -40,6 +48,24 @@ const InGame: React.FC = () => {
     setSelected(new Set());
   }, [selected, positions, setPositions]);
 
+  const onMovePlayer = useCallback(
+    (player: ActivePlayerOutcome, direction: "up" | "down") => {
+      const offset = direction === "up" ? -1 : 1;
+      const temp = [...positions];
+
+      let pIndex = positions.findIndex((p) => p.name === player.name);
+      let nIndex = positions.findIndex(
+        (p) => p.kickingPosition === player.kickingPosition + offset
+      );
+
+      temp[pIndex].kickingPosition += offset;
+      temp[nIndex].kickingPosition -= offset;
+
+      setPositions(temp);
+    },
+    [positions, setPositions]
+  );
+
   return (
     <AppContainer
       Header={
@@ -56,21 +82,42 @@ const InGame: React.FC = () => {
           {tab === "Pitching" && (
             <div className="border-t p-2 border-gray-200 bg-white">
               <Button onClick={onPlayerSwap} disabled={selected.size !== 2}>
+                <ArrowPathRoundedSquareIcon className="mr-1 h-5 w-5" />
                 Swap
               </Button>
             </div>
           )}
           {tab === "Kicking" && (
-            <div className="border-t p-2 border-gray-200 bg-white">
-              <Button onClick={() => shareLineup(positions)}>
-                Share Lineup
-              </Button>
+            <div className="border-t p-2 border-gray-200 bg-white flex justify-between">
+              {editLineup ? (
+                <Button onClick={() => setEditLineup(false)}>
+                  <CheckIcon className="mr-1 h-5 w-5" />
+                  Done
+                </Button>
+              ) : (
+                <>
+                  <Button onClick={() => setEditLineup(true)}>
+                    <PencilSquareIcon className="mr-1 h-5 w-5" />
+                    Edit
+                  </Button>
+                  <Button onClick={() => shareLineup(positions)}>
+                    <PaperAirplaneIcon className="mr-1 h-5 w-5" />
+                    Share Lineup
+                  </Button>
+                </>
+              )}
             </div>
           )}
         </div>
       }
     >
-      {tab === "Kicking" && <KickingTable positions={positions} />}
+      {tab === "Kicking" && (
+        <KickingTable
+          editLineup={editLineup}
+          positions={positions}
+          onMovePlayer={onMovePlayer}
+        />
+      )}
       {tab === "Pitching" && (
         <PositionsTable
           positions={positions}

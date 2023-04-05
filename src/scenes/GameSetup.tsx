@@ -1,3 +1,4 @@
+import { PlayIcon } from "@heroicons/react/20/solid";
 import React, { useCallback } from "react";
 import AppContainer from "../components/AppContainer";
 import PlayersTable from "../components/PlayersTable";
@@ -44,7 +45,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onReady }) => {
     <AppContainer
       Footer={
         <div className="border-t p-2 border-gray-200 bg-white">
-          <Button onClick={startGame}>Assume Positions</Button>
+          <Button onClick={startGame}>
+            <PlayIcon className="mr-1 h-5 w-5" />
+            Assume Positions
+          </Button>
         </div>
       }
     >

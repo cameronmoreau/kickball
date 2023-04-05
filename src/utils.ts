@@ -5,9 +5,9 @@ export const orderPositionsForKicking = (positions: ActivePlayerOutcome[]) =>
 
 export const shareLineup = (positions: ActivePlayerOutcome[]) => {
   const text =
-    "Kicker Lineup\n" +
+    "Kicker Lineup" +
     orderPositionsForKicking(positions).map(
-      (p) => `#${p.kickingPosition} - ${p.name}`
+      (p) => `\n#${p.kickingPosition} - ${p.name}`
     );
 
   window.navigator.share({

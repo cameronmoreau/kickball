@@ -48,7 +48,7 @@ export const PLAYERS: Player[] = [
       "https://ca.slack-edge.com/T04RRS8MHHU-U04SNF4C6TD-6d4d86b3c448-192",
   },
   {
-    name: "Mary Elliot",
+    name: "Mary Elliott",
     gender: "female",
     imageUrl:
       "https://ca.slack-edge.com/T04RRS8MHHU-U04S7DLCK5L-8c1778e30dda-192",

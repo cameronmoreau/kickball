@@ -1,5 +1,6 @@
 import { createContext, ReactElement, useContext, useState } from "react";
 import { PLAYERS } from "./data";
+import { usePersistentState } from "./localStorage";
 import { ActivePlayer, ActivePlayerOutcome } from "./types";
 
 interface State {
@@ -12,10 +13,14 @@ interface State {
 export const StateContext = createContext<State>({} as any);
 
 const StateProvider = ({ children }: { children: ReactElement }) => {
-  const [players, setPlayers] = useState<ActivePlayer[]>(
+  const [players, setPlayers] = usePersistentState<ActivePlayer[]>(
+    "players",
     PLAYERS.map((p) => ({ ...p, available: true }))
   );
-  const [positions, setPositions] = useState<ActivePlayerOutcome[]>([]);
+  const [positions, setPositions] = usePersistentState<ActivePlayerOutcome[]>(
+    "positions",
+    []
+  );
 
   return (
     <StateContext.Provider

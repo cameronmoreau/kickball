@@ -8,6 +8,7 @@ import React, { useCallback, useState } from "react";
 import AppContainer from "../components/AppContainer";
 import KickingTable from "../components/KickingTable";
 import PositionsTable from "../components/PositionsTable";
+import { clearAllStorage } from "../localStorage";
 import { useKickballState } from "../state";
 import { ActivePlayerOutcome } from "../types";
 import Button from "../ui/Button";
@@ -125,6 +126,17 @@ const InGame: React.FC = () => {
           onSelectChanged={onSelectedChanged}
         />
       )}
+      <div className="flex justify-center my-4">
+        <Button
+          onClick={() => {
+            if (window.confirm("Are you sure you want to wipe all the data?")) {
+              clearAllStorage();
+            }
+          }}
+        >
+          Clear Everything
+        </Button>
+      </div>
     </AppContainer>
   );
 };

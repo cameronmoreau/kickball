@@ -42,7 +42,10 @@ const PositionsTable: React.FC<Props> = ({
       </thead>
       <TableBody>
         {positions.map((p, idx) => (
-          <tr key={`position-${idx}`}>
+          <tr
+            key={`position-${idx}`}
+            onClick={() => onSelectChanged(idx, !selectedIndexes.has(idx))}
+          >
             <Td>
               <Checkbox
                 id={`checkbox-${idx}`}
